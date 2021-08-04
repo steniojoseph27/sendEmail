@@ -40,3 +40,20 @@ firebase.initializeApp(firebaseConfig);
       message: message,
     });
   }
+
+  // Retrieve Infos
+  let ref = firebase.database().ref("infos");
+  ref.on("value", gotData);
+
+  function gotData(data) {
+    let info = data.val();
+    let keys = Object.keys(info);
+
+    for (let i = 0; i < keys.length; i++) {
+      let i = keys[i]
+      let name = info[i].name
+      let email = info[i].email
+      let message = info[i].message
+      console.log(name, email, message);
+    }
+  }
