@@ -23,11 +23,12 @@ firebase.initializeApp(firebaseConfig);
     let name = document.querySelector(".name").value;
     let email = document.querySelector(".email").value;
     let message = document.querySelector(".message").value;
-    console.log(name, email, message);
   
     saveContactInfo(name, email, message);
   
     document.querySelector(".contact-form").reset();
+
+    sendEmail(name, email, message);
   }
   
   // Save infos to Firebase
@@ -39,21 +40,51 @@ firebase.initializeApp(firebaseConfig);
       email: email,
       message: message,
     });
+
+    retrieveInfos();
   }
 
   // Retrieve Infos
-  let ref = firebase.database().ref("infos");
-  ref.on("value", gotData);
+  function retrieveInfos() {
+    let ref = firebase.database().ref("infos");
+    ref.on("value", gotData);
+  }
 
   function gotData(data) {
     let info = data.val();
     let keys = Object.keys(info);
 
     for (let i = 0; i < keys.length; i++) {
-      let i = keys[i]
-      let name = info[i].name
-      let email = info[i].email
-      let message = info[i].message
+      let infoData = keys[i];
+      let name = info[infoData].name;
+      let email = info[infoData].email;
+      let message = info[infoData].message;
       console.log(name, email, message);
+
+      let infosResults = document.querySelector(".infosResults");
+
+      infosResults.innerHTML += `<div>
+      <p><strong>Name: </strong> ${name} <br></br>
+      <a><strong>Email: </strong> ${email}</a> <br></br>
+      <a><strong>Message: </strong> ${message}</a>
+      </p>
+    </div>`;
     }
+  }
+
+  retrieveInfos();
+
+  // Send Email Info
+  function sendEmail(name, email, message) {
+    Email
+    .send({
+      Host: "smtp.gmail.com",
+      Username: "ursel.ellis87@gmail.com",
+      Password: "utebgfrosrzivwyq",
+      To: "ursel.ellis87@gmail.com",
+      From: `${email}`,
+      Subject: `${name} send you a message`,
+      Body: `Name : ${name} <br/> Email: ${email} <br/> Message: ${message}`,
+    })
+    .then((message) => alert("mail send successfully."))
   }
