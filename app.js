@@ -84,7 +84,7 @@ firebase.initializeApp(firebaseConfig);
       To: "ursel.ellis87@gmail.com",
       From: `${email}`,
       Subject: `${name} send you a message`,
-      Body: `Name : ${name} <br/> Email: ${email} <br/> Message: ${message}`,
+      Body: `Name: ${name} <br/> Email: ${email} <br/> Message: ${message}`,
     })
     .then((message) => alert("mail send successfully."))
   }
